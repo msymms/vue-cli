@@ -1,42 +1,45 @@
 <template>
     <div class="container">
-        <app-new-quote @quoteAdded="newQuote"></app-new-quote>
-        <app-quote-grid :quotes="quotes" @quoteDeleted="deleteQuote"></app-quote-grid>
         <div class="row">
-            <div class="col-sm-12 text-center">
-              <div class="alert alert-info">Info: Click on a Quote to delete it!</div>
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                <h1 class="text-center">The Super Quiz</h1>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+            
+                    <component :is="mode" @answered="answered($event)" @confirmed="mode = 'app-question'"></component>
+        
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import QuoteGrid from './components/QuoteGrid.vue';
-    import NewQuote from './components/NewQuote.vue';
+    import Question from './components/Question.vue';
+    import Answer from './components/Answer.vue';
 
     export default {
-        data: function () {
-          return {
-            quotes: [
-                'Just a Quote to start out'
-            ],
-            maxQuotes: 10
+        data() {
+            return {
+                mode: 'app-question'
+            }
+        },
+        methods: {
+          answered(isCorrect) {
+              if (isCorrect) {
+                  this.mode = 'app-answer';
+              } else {
+                  this.mode = 'app-question';
+                  alert('Wrong, try again!');
+              }
           }
         },
-      methods: {
-          newQuote(quote) {
-            this.quotes.push(quote);
-          },
-          deleteQuote(idx){
-            this.quotes.splice(idx,1);
-          }
-      },
-      components: {
-          appQuoteGrid: QuoteGrid,
-          appNewQuote: NewQuote
-      }
+        components: {
+            appQuestion: Question,
+            appAnswer: Answer
+        }
     }
 </script>
 
-<style>
-</style>
